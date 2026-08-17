@@ -28,7 +28,7 @@ jobs:
           -r cli,htmlextra \
           --reporter-htmlextra-export "reports/stripe-report.html"
 
-          - name: Upload Newman report
+      - name: Upload Newman report
           if: always()
           uses: actions/upload-artifact@v4
           with:
