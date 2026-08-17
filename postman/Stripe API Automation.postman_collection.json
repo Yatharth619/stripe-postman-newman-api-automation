@@ -1,0 +1,715 @@
+{
+  "info": {
+    "_postman_id": "1af7821a-207f-4b75-ae63-836091b7bb71",
+    "name": "Stripe API Automation",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57451579",
+    "_collection_link": "https://go.postman.co/collection/57451579-1af7821a-207f-4b75-ae63-836091b7bb71?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Create Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Check status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const userDetail = pm.response.json();\r",
+                  "pm.test(\"Check whether customer was created successfully\", () => {\r",
+                  "    pm.expect(userDetail.id).to.not.be.null\r",
+                  "})\r",
+                  "pm.test(\"Check returned name and email matches the one submitted\", () => {\r",
+                  "    pm.expect(userDetail.name).to.equal(pm.environment.get(\"name\"))\r",
+                  "    pm.expect(userDetail.email).to.equal(pm.environment.get(\"email\"))\r",
+                  "})\r",
+                  "pm.test(\"Check data types are correct\", () => {\r",
+                  "   pm.expect(userDetail.id).to.be.a('string')\r",
+                  "   pm.expect(userDetail.name).to.be.a('string')\r",
+                  "   pm.expect(userDetail.email).to.be.a('string')\r",
+                  "})\r",
+                  "pm.test(\"Fetch customerId\", () => {\r",
+                  "    pm.environment.set(\"customerId\", userDetail.id)\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "type": "text",
+                  "key": "name",
+                  "value": "{{name}}"
+                },
+                {
+                  "type": "text",
+                  "key": "email",
+                  "value": "{{email}}"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Check status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const userDetail = pm.response.json()\r",
+                  "pm.test(\"Check if customer is same as previous\", () => {\r",
+                  "    pm.expect(userDetail.id).to.eql(pm.environment.get(\"customerId\"))\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers/{{customerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers",
+                "{{customerId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code check\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const userDetail = pm.response.json()\r",
+                  "pm.test(\"Verify updated address fields\", () => {\r",
+                  "    pm.expect(userDetail.address.line1).to.eql(\"42102 NE 244th Ave\")\r",
+                  "    pm.expect(userDetail.address.country).to.eql(\"US\")\r",
+                  "    pm.expect(userDetail.address.postal_code).to.eql(\"98601\")\r",
+                  "    pm.expect(userDetail.address.city).to.eql(\"Amboy\")\r",
+                  "    pm.expect(userDetail.address.state).to.eql(\"Washington\")\r",
+                  "})\r",
+                  "pm.test(\"Check if email is still same\", () => {\r",
+                  "    pm.expect(userDetail.email).to.eql(pm.environment.get(\"email\"))\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "address[line1]",
+                  "value": "42102 NE 244th Ave",
+                  "type": "text",
+                  "uuid": "ea33d118-9971-4c1e-9997-70578a236adb"
+                },
+                {
+                  "key": "address[postal_code]",
+                  "value": "98601",
+                  "type": "text",
+                  "uuid": "00a01dec-a622-4fdf-b78d-fb40963f3edb"
+                },
+                {
+                  "key": "address[city]",
+                  "value": "Amboy",
+                  "type": "text",
+                  "uuid": "27b8ea56-b453-4363-98fe-8ef0d20a68ba"
+                },
+                {
+                  "key": "address[state]",
+                  "value": "Washington",
+                  "type": "text",
+                  "uuid": "0fc14f10-1b8b-4a96-b332-fe9181dffab9"
+                },
+                {
+                  "key": "address[country]",
+                  "value": "US",
+                  "type": "text",
+                  "uuid": "a34f2afb-6e4e-4792-a08c-f262869d9cf0"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers/{{customerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers",
+                "{{customerId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Updated Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code check\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const userDetail = pm.response.json()\r",
+                  "pm.test(\"Verify updated address fields\", () => {\r",
+                  "    pm.expect(userDetail.address.line1).to.eql(\"42102 NE 244th Ave\")\r",
+                  "    pm.expect(userDetail.address.country).to.eql(\"US\")\r",
+                  "    pm.expect(userDetail.address.postal_code).to.eql(\"98601\")\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers/{{customerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers",
+                "{{customerId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create New Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Check status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const userDetail = pm.response.json()\r",
+                  "pm.test(\"Fetch deleteCustomerId\", () => {\r",
+                  "    pm.environment.set(\"deleteCustomerId\", userDetail.id)\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "{{name1}}",
+                  "type": "text",
+                  "uuid": "376178c3-21d4-4d13-a683-ae39d7be3843"
+                },
+                {
+                  "key": "email",
+                  "value": "{{email1}}",
+                  "type": "text",
+                  "uuid": "ccbdad36-822f-4fba-9fb7-76f2243cfea3"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete New Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Check status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const detail = pm.response.json()\r",
+                  "pm.test(\"Verify deletion\", () => {\r",
+                  "    pm.expect(detail.deleted).to.be.true\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers/{{deleteCustomerId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers",
+                "{{deleteCustomerId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Invalid Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", () => {\r",
+                  "    pm.response.to.have.status(404)\r",
+                  "})\r",
+                  "const error = pm.response.json().error\r",
+                  "pm.test(\"Verify error\", () => {\r",
+                  "    pm.expect(error.message).to.contain(\"No such customer\")\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/customers/cus_V5CEB5iCHgERlz",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "customers",
+                "cus_V5CEB5iCHgERlz"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Verify status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const product = pm.response.json()\r",
+                  "pm.test(\"Check product id is string\", () => {\r",
+                  "    pm.expect(product.id).to.be.a(\"string\")\r",
+                  "})\r",
+                  "pm.test(\"Verify Product name\", () => {\r",
+                  "    pm.expect(product.name).to.eql(\"Bicycle\")\r",
+                  "})\r",
+                  "pm.test(\"Product Id stored\", () => {\r",
+                  "    pm.environment.set(\"productId\", product.id)\r",
+                  "})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "name",
+                  "value": "Bicycle",
+                  "type": "text",
+                  "uuid": "ea4aa3ab-bdbf-4bfc-b22e-3df579892fc9"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/products",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "products"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Verify status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/products/{{productId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "products",
+                "{{productId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Price",
+      "item": [
+        {
+          "name": "Create Price",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Verify status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const priceDetail = pm.response.json()\r",
+                  "pm.test(\"Verify Product id\", () => {\r",
+                  "    pm.expect(priceDetail.product).to.eql(pm.environment.get('productId'))\r",
+                  "})\r",
+                  "pm.test(\"Verify Amount\", () => {\r",
+                  "    pm.expect(priceDetail.unit_amount).to.eql(200)\r",
+                  "})\r",
+                  "pm.test(\"Check id exists\", () => {\r",
+                  "    pm.expect(priceDetail.id).to.be.a('string')\r",
+                  "})\r",
+                  "pm.test(\"Save priceId\", () => {\r",
+                  "    pm.environment.set(\"priceId\", priceDetail.id )\r",
+                  "})\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "currency",
+                  "value": "USD",
+                  "type": "text",
+                  "uuid": "05149551-68d6-4f03-9e42-d635fba654d4"
+                },
+                {
+                  "key": "product",
+                  "value": "{{productId}}",
+                  "type": "text",
+                  "uuid": "cf915041-711f-4b14-92a1-0f65df53dac5"
+                },
+                {
+                  "key": "unit_amount",
+                  "value": "200",
+                  "type": "text",
+                  "uuid": "0eb57f1e-6969-43f2-aa6a-64900474cb15"
+                },
+                {
+                  "key": "tax_behavior",
+                  "value": "exclusive",
+                  "type": "text",
+                  "uuid": "070df9e8-e8a2-4012-becd-f6ee6ad61859"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/prices",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "prices"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Create Payment Intent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Verify status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const paymentDetail = pm.response.json()\r",
+                  "pm.test(\"Verify Amount\", () => {\r",
+                  "    pm.expect(paymentDetail.amount).to.eql(1000)\r",
+                  "})\r",
+                  "pm.test(\"Check payment id exists\", () => {\r",
+                  "    pm.expect(paymentDetail.id).to.be.a('string')\r",
+                  "})\r",
+                  "pm.test(\"Verify currency\", () => {\r",
+                  "    pm.expect(paymentDetail.currency).to.eql(\"usd\")\r",
+                  "})\r",
+                  "pm.test(\"Check payment status\", () => {\r",
+                  "    pm.expect(paymentDetail.status).to.eql(\"requires_confirmation\")\r",
+                  "})\r",
+                  "pm.test(\"Save paymentIntentId\", () => {\r",
+                  "    pm.environment.set(\"paymentIntentId\", paymentDetail.id )\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "amount",
+                  "value": "1000",
+                  "type": "text",
+                  "uuid": "a48c1131-401e-417f-8b10-173e4dc7d95c"
+                },
+                {
+                  "key": "currency",
+                  "value": "USD",
+                  "type": "text",
+                  "uuid": "e392faf8-ee98-4349-9e9a-32304e5726ed"
+                },
+                {
+                  "key": "payment_method",
+                  "value": "pm_card_visa",
+                  "type": "text",
+                  "uuid": "45a38996-8eba-41ae-8d98-dfbe91232a6d"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/payment_intents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "payment_intents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm Payment Intent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Verify status code\", () => {\r",
+                  "    pm.response.to.have.status(200)\r",
+                  "})\r",
+                  "const confirmationDetail = pm.response.json()\r",
+                  "pm.test(\"Verify Amount\", () => {\r",
+                  "    pm.expect(confirmationDetail.amount).to.eql(1000)\r",
+                  "})\r",
+                  "pm.test(\"Check payment id exists\", () => {\r",
+                  "    pm.expect(confirmationDetail.id).to.be.a('string')\r",
+                  "})\r",
+                  "pm.test(\"Verify status is success\", () => {\r",
+                  "    pm.expect(confirmationDetail.status).to.eql('succeeded')\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "return_url",
+                  "value": "https://example.com/return",
+                  "type": "text",
+                  "uuid": "78595f4d-7f2a-4738-9870-014c31645b64"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/v1/payment_intents/{{paymentIntentId}}/confirm",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "v1",
+                "payment_intents",
+                "{{paymentIntentId}}",
+                "confirm"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{secretKey}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

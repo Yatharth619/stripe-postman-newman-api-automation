@@ -1,0 +1,13 @@
+# Postman environment files
+*.postman_environment.json
+
+# Newman reports
+reports/
+newman/
+
+# Local environment/secrets
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
