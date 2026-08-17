@@ -1,5 +1,8 @@
-# Postman environment files
+# Ignore Postman environments by default
 *.postman_environment.json
+
+# Allow the sanitized project environment
+!postman/Stripe Sandbox.postman_environment.json
 
 # Newman reports
 reports/
