@@ -1,0 +1,29 @@
+name: Stripe API Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Newman
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run API tests
+        run: |
+          newman run "postman/Stripe API Automation.postman_collection.json" \
+            --env-var "baseUrl=https://api.stripe.com" \
+            --env-var "secretKey=${{ secrets.STRIPE_SECRET_KEY }}" \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export "reports/stripe-report.html"
