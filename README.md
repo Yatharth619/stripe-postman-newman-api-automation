@@ -50,13 +50,14 @@ The collection contains automated API tests for customers, products, prices, and
 
 <img width="487" height="573" alt="image" src="https://github.com/user-attachments/assets/ce0993a6-b604-41f0-ad9c-b9ba73c962a5" />
 
+
 ## Test Results
 
 **12 requests | 38 assertions | 0 failures**
 
 **Newman HTML Report Screenshot**
 
-<!-- Paste your Newman HTML report screenshot below this line -->
+<img width="931" height="887" alt="image" src="https://github.com/user-attachments/assets/fdf6924d-5d1a-4bf9-8267-3113c2db87c1" />
 
 
 ## GitHub Actions
